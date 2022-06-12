@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Scroll Down</title>
+    <style>
+      html {
+        font-size: 30px;
+        line-height: 1.6;
+        font-family: -apple-system, BlinkMacSystemFont, "arcade";
+        background-color: rgb(204, 246, 204);
+      }
+      header {
+        margin: 5rem 2rem 4rem 15rem;
+      }
+      header h1 {
+        font-size: 5rem;
+        line-height: 1.2;
+        font-weight: 500;
+        color: rgb(0, 0, 255);
+      }
+      header h2 {
+        font-size: 1.5rem;
+        line-height: 1.2;
+        font-weight: 300;
+        color: rgb(0, 0, 255);
+      }
+
+      main {
+        display: grid;
+        grid-template-columns: 2fr;
+        grid-gap: 1rem;
+        width: 80vw;
+        margin: 5rem 5rem;
+        grid-template-rows: auto;
+      }
+      main figcaption {
+        font-size: 1rem;
+        font-family: inherit;
+      }
+      main img {
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+      }
+
+    </style>
+    </head>
+    <body>
+  
+    <header>
+      <h1>Scroll Down</h1>
+      <h2>Welcome to the loop!</h2>
+      
+    </header>
+    <main>
+         <!-- images will be loaded here with figure and figcaption -->
+    </main>
+
+    <footer>
+      <p>The Footer. &copy; 2019 Turkey Stuff Inc.</p>
+    
+    <script>
+      const URL =
+        "https://gist.githubusercontent.com/saioallorente/dfaffe1a6d2af01cde03015ae1aef80f/raw/82728f594b06c212c51ea0ec7213fabf350b3536/gistfile1.txt";
+      document.addEventListener("DOMContentLoaded", () => {
+        //set up the IntersectionObserver to load more images if the footer is visible.
+        let options = {
+          root: null,
+          rootMargins: "0px",
+          threshold: 0.5
+        };
+        const observer = new IntersectionObserver(handleIntersect, options);
+        observer.observe(document.querySelector("footer"));
+        //an initial load of some data
+        getData();
+      });
+      function handleIntersect(entries) {
+        if (entries[0].isIntersecting) {
+          console.warn("something is intersecting with the viewport");
+          getData();
+        }
+      }
+      function getData() {
+        let main = document.querySelector("main");
+        console.log("fetch some JSON data");
+        fetch(URL)
+          .then(response => response.json())
+          .then(data => {
+            // data.items[].img, data.items[].name
+            data.items.forEach(item => {
+              let fig = document.createElement("figure");
+              let fc = document.createElement("figcaption");
+              let img = document.createElement("img");
+              img.src = item.img;
+              img.alt = item.name;
+              fc.textContent = item.name;
+              fig.appendChild(img);
+              fig.appendChild(fc);
+              main.appendChild(fig);
+            });
+          });
+      }
+
+    </script>
+  </body>
+</html>
